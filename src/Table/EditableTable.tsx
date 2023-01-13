@@ -117,19 +117,37 @@ const EditableTable = () => {
   };
 
   const handleSave = (row: Item) => {
-    // const newData = [...dataSource];
+    const rowKeys = Object.keys(row);
+    const columnName = rowKeys[rowKeys.length - 1];
+    //@ts-ignore
+    const cellValue = row[columnName];
+
+    console.log(row)
+
+    const newData = dataSource.map((item) => {
+      item.forEach((el) => {
+        if (el.columnName === columnName) {
+          el.value = cellValue;
+          return el;
+        }
+      })
+      return item;
+    });
+
+    // console.log(newData)
     // const index = newData.findIndex((item) => row.key === item.key);
     // const item = newData[index];
     // newData.splice(index, 1, {
     //   ...item,
     //   ...row,
     // });
-    // setDataSource(newData);
+
+    setDataSource(newData);
   };
 
   const components = {
     body: {
-      // row: EditableRow,
+      row: EditableRow,
       cell: EditableCell,
     },
   };
