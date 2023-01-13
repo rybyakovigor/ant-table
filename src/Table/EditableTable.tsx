@@ -7,51 +7,100 @@ import { Item } from "./item.interface";
 
 interface PropsType {}
 
-const data: Item[][] = [
+// const data: Item[][] = [
+//   [
+//     {
+//       key: "0",
+//       columnName: "Имя",
+//       value: "32",
+//     },
+//     {
+//       key: "1",
+//       columnName: "Фамилия",
+//       value: "33",
+//     },
+//   ],
+//   [
+//     {
+//       key: "0",
+//       columnName: "Имя",
+//       value: "66",
+//     },
+//     {
+//       key: "1",
+//       columnName: "Фамилия",
+//       value: "99",
+//     },
+//   ],
+// ];
+
+// const transformDataToColumns = (data: Item[][]) => {
+//   const result: any[] = [];
+//   result.push({
+//     title: "operation",
+//     dataIndex: "operation",
+//     render: (_, record: { key: React.Key }) => (
+//       <Popconfirm title="Sure to delete?" onConfirm={() => {}}>
+//         <a>Delete</a>
+//       </Popconfirm>
+//     ),
+//   });
+//   data[0].forEach((i) => {
+//     result.push({
+//       title: i.columnName,
+//       dataIndex: i.columnName,
+//       render: () => i.value,
+//       editable: true,
+//     });
+//   });
+
+//   return result;
+// };
+
+const data = [
   [
     {
-      key: "0",
+      id: "name",
       columnName: "Имя",
-      value: "32",
+      value: "petr",
     },
     {
-      key: "1",
+      id: "surname",
       columnName: "Фамилия",
-      value: "33",
+      value: "petrov",
     },
   ],
   [
     {
-      key: "0",
+      id: "name",
       columnName: "Имя",
-      value: "66",
+      value: "vasya",
     },
     {
-      key: "1",
+      id: "surname",
       columnName: "Фамилия",
-      value: "99",
+      value: "vasin",
     },
   ],
 ];
 
-const transformDataToColumns = (data: Item[][]) => {
+const createCells = () => {
   const result: any[] = [];
-  result.push({
-    title: "operation",
-    dataIndex: "operation",
-    //@ts-ignore
-    render: (_, record: { key: React.Key }) => (
-      <Popconfirm title="Sure to delete?" onConfirm={() => {}}>
-        <a>Delete</a>
-      </Popconfirm>
-    ),
-  });
-  data[0].forEach((i) => {
+
+  data[0].forEach((dataSourceItem, index) => {
     result.push({
-      title: i.columnName,
-      dataIndex: i.columnName,
-      render: () => i.value,
+      title: dataSourceItem.columnName,
+      dataIndex: dataSourceItem.columnName,
+      key: dataSourceItem.columnName,
       editable: true,
+      render: (_: any, row: any) => {
+        const a = row.find(
+          (q: any) => q.columnName === dataSourceItem.columnName
+        );
+        if (a) {
+          return a.value;
+        }
+      },
     });
   });
 
@@ -68,14 +117,14 @@ const EditableTable = () => {
   };
 
   const handleSave = (row: Item) => {
-    const newData = [...dataSource];
+    // const newData = [...dataSource];
     // const index = newData.findIndex((item) => row.key === item.key);
     // const item = newData[index];
     // newData.splice(index, 1, {
     //   ...item,
     //   ...row,
     // });
-    setDataSource(newData);
+    // setDataSource(newData);
   };
 
   const components = {
@@ -85,7 +134,7 @@ const EditableTable = () => {
     },
   };
 
-  const mergedColumns = transformDataToColumns(dataSource).map((col) => {
+  const mergedColumns = createCells().map((col) => {
     if (!col.editable) {
       return col;
     }
@@ -105,8 +154,8 @@ const EditableTable = () => {
     <Table
       components={components}
       //@ts-ignore
-      rowKey={(record) => record.title}
-      rowClassName={() => "editable-row"}
+      // rowKey={(record) => record.title}
+      // rowClassName={() => "editable-row"}
       bordered
       dataSource={dataSource}
       columns={mergedColumns as ColumnTypes}

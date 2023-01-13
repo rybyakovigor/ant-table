@@ -14,33 +14,48 @@ const App: React.FC = () => {
         value: "petr",
       },
       {
-        key: "1",
+        key: "0",
         columnName: "Фамилия",
         value: "petrov",
+      },
+      {
+        key: "0",
+        columnName: "Отчество",
+        value: "петрович",
       },
     ],
     [
       {
-        key: "2",
+        key: "1",
         columnName: "Имя",
         value: "vasya",
       },
       {
-        key: "3",
+        key: "1",
         columnName: "Фамилия",
         value: "vasin",
+      },
+      {
+        key: "1",
+        columnName: "Отчество",
+        value: "васильевич",
       },
     ],
   ];
 
   const c = () => {
     const result: any[] = [];
-    dataSource.forEach((dataSourceItem, index) => {
+    dataSource[0].forEach((dataSourceItem, index) => {
       result.push({
-        title: dataSourceItem[index].columnName,
-        dataIndex: dataSourceItem[index].columnName,
-        key: dataSourceItem[index].columnName,
-        render: (_: any, row: any) => row[index].value,
+        title: dataSourceItem.columnName,
+        dataIndex: dataSourceItem.columnName,
+        key: dataSourceItem.columnName,
+        render: (_: any, row: any) => {
+          const a = row.find((q: any) => q.columnName === dataSourceItem.columnName)
+          if (a) {
+            return a.value
+          }
+        },
       });
     });
 
@@ -52,8 +67,8 @@ const App: React.FC = () => {
       {/* <Button onClick={handleAdd} type="primary" style={{ marginBottom: 16 }}>
         Add a row
       </Button> */}
-      {/* <EditableTable /> */}
-      <Table dataSource={dataSource} columns={c()} />
+      <EditableTable />
+      {/* <Table dataSource={dataSource} columns={c()} /> */}
     </div>
   );
 };
