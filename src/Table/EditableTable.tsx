@@ -60,6 +60,11 @@ interface PropsType {}
 const data = [
   [
     {
+      id: "id",
+      columnName: "id",
+      value: "01",
+    },
+    {
       id: "name",
       columnName: "Имя",
       value: "petr",
@@ -71,6 +76,11 @@ const data = [
     },
   ],
   [
+    {
+      id: "id",
+      columnName: "id",
+      value: "02",
+    },
     {
       id: "name",
       columnName: "Имя",
@@ -88,6 +98,10 @@ const createCells = () => {
   const result: any[] = [];
 
   data[0].forEach((dataSourceItem, index) => {
+    if (dataSourceItem.columnName === "id") {
+      return;
+    }
+
     result.push({
       title: dataSourceItem.columnName,
       dataIndex: dataSourceItem.columnName,
@@ -116,32 +130,25 @@ const EditableTable = () => {
     // setDataSource(newData);
   };
 
-  const handleSave = (row: Item) => {
+  const handleSave = (row: any) => {
     const rowKeys = Object.keys(row);
+    const rowId = row[0].value;
     const columnName = rowKeys[rowKeys.length - 1];
     //@ts-ignore
     const cellValue = row[columnName];
 
-    console.log(row)
-
     const newData = dataSource.map((item) => {
-      item.forEach((el) => {
-        if (el.columnName === columnName) {
-          el.value = cellValue;
-          return el;
-        }
-      })
+      if (item[0].value === rowId) {
+        item.forEach((el) => {
+          if (el.columnName === columnName) {
+            el.value = cellValue;
+            return el;
+          }
+        });
+      }
       return item;
     });
-
-    // console.log(newData)
-    // const index = newData.findIndex((item) => row.key === item.key);
-    // const item = newData[index];
-    // newData.splice(index, 1, {
-    //   ...item,
-    //   ...row,
-    // });
-
+    
     setDataSource(newData);
   };
 
